@@ -1,0 +1,5 @@
+High-Level Architecture : What are the major parts of the system and how do they interact?
+
+Low-Level Architecture : What services, modules, databases, queues, interfaces, and processing steps actually implement it?
+
+MULTI-LEVEL CACHING STRATEGY : Describe the caching strategy used in the system, including the different levels of caching (e.g., in-memory, distributed cache, database cache) and how they interact to improve performance and reduce latency.
