@@ -1,0 +1,26 @@
+# FastAPI Backend — RAG Chatbot Platform
+fastapi[standard]==0.115.12
+uvicorn[standard]==0.34.3
+
+# Database
+sqlalchemy[asyncio]==2.0.41
+asyncpg==0.30.0
+psycopg2-binary==2.9.10
+alembic==1.15.2
+
+# Infrastructure Clients
+qdrant-client==1.14.2
+redis[hiredis]==5.3.0
+minio==7.2.16
+
+# Utilities
+pydantic==2.11.4
+pydantic-settings==2.9.1
+python-dotenv==1.1.0
+python-multipart==0.0.20
+httpx==0.28.1
+
+# LLM Providers (will be used in later phases)
+# openai>=1.0
+# anthropic>=0.30
+# google-generativeai>=0.8
