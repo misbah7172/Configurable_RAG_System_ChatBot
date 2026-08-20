@@ -1,101 +1,107 @@
 @import "tailwindcss";
 
-/* ===== Design System: CSS Custom Properties ===== */
-:root {
-  /* Colors - Light Theme (Default, matching reference UI) */
-  --background: 0 0% 100%;
-  --foreground: 240 10% 3.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 240 10% 3.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 3.9%;
-  --primary: 240 5.9% 10%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 240 4.8% 95.9%;
-  --secondary-foreground: 240 5.9% 10%;
-  --muted: 240 4.8% 95.9%;
-  --muted-foreground: 240 3.8% 46.1%;
-  --accent: 240 4.8% 95.9%;
-  --accent-foreground: 240 5.9% 10%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 0 0% 98%;
-  --success: 142 76% 36%;
-  --success-foreground: 0 0% 98%;
-  --warning: 38 92% 50%;
-  --warning-foreground: 0 0% 98%;
-  --border: 240 5.9% 90%;
-  --input: 240 5.9% 90%;
-  --ring: 240 5.9% 10%;
-  --radius: 0.5rem;
+@theme {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
-  /* Sidebar */
-  --sidebar: 0 0% 98%;
-  --sidebar-foreground: 240 5.3% 26.1%;
-  --sidebar-border: 220 13% 91%;
-  --sidebar-accent: 240 4.8% 95.9%;
-  --sidebar-accent-foreground: 240 5.9% 10%;
-  --sidebar-primary: 240 5.9% 10%;
-  --sidebar-primary-foreground: 0 0% 98%;
-  --sidebar-ring: 240 5.9% 10%;
-  --sidebar-width: 16rem;
-  --sidebar-width-collapsed: 3.5rem;
+  --color-background: #ffffff;
+  --color-foreground: #09090b;
+
+  --color-card: #ffffff;
+  --color-card-foreground: #09090b;
+
+  --color-popover: #ffffff;
+  --color-popover-foreground: #09090b;
+
+  --color-primary: #18181b;
+  --color-primary-foreground: #fafafa;
+
+  --color-secondary: #f4f4f5;
+  --color-secondary-foreground: #18181b;
+
+  --color-muted: #f4f4f5;
+  --color-muted-foreground: #71717a;
+
+  --color-accent: #f4f4f5;
+  --color-accent-foreground: #18181b;
+
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #fafafa;
+
+  --color-success: #10b981;
+  --color-success-foreground: #fafafa;
+
+  --color-warning: #f59e0b;
+  --color-warning-foreground: #fafafa;
+
+  --color-border: #e4e4e7;
+  --color-input: #e4e4e7;
+  --color-ring: #18181b;
+
+  /* Sidebar Palette */
+  --color-sidebar: #fbfbfb;
+  --color-sidebar-foreground: #3f3f46;
+  --color-sidebar-border: #ececee;
+  --color-sidebar-accent: #f0f0f2;
+  --color-sidebar-accent-foreground: #18181b;
+  --color-sidebar-primary: #18181b;
+  --color-sidebar-primary-foreground: #fafafa;
 }
 
 .dark {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
-  --card: 240 10% 3.9%;
-  --card-foreground: 0 0% 98%;
-  --popover: 240 10% 3.9%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 0 0% 98%;
-  --primary-foreground: 240 5.9% 10%;
-  --secondary: 240 3.7% 15.9%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 240 3.7% 15.9%;
-  --muted-foreground: 240 5% 64.9%;
-  --accent: 240 3.7% 15.9%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
-  --success: 142 76% 36%;
-  --success-foreground: 0 0% 98%;
-  --warning: 38 92% 50%;
-  --warning-foreground: 0 0% 98%;
-  --border: 240 3.7% 15.9%;
-  --input: 240 3.7% 15.9%;
-  --ring: 240 4.9% 83.9%;
+  --color-background: #09090b;
+  --color-foreground: #fafafa;
 
-  --sidebar: 240 5.9% 10%;
-  --sidebar-foreground: 240 4.8% 95.9%;
-  --sidebar-border: 240 3.7% 15.9%;
-  --sidebar-accent: 240 3.7% 15.9%;
-  --sidebar-accent-foreground: 240 4.8% 95.9%;
-  --sidebar-primary: 224.3 76.3% 48%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-ring: 240 4.9% 83.9%;
+  --color-card: #121215;
+  --color-card-foreground: #fafafa;
+
+  --color-popover: #121215;
+  --color-popover-foreground: #fafafa;
+
+  --color-primary: #fafafa;
+  --color-primary-foreground: #18181b;
+
+  --color-secondary: #27272a;
+  --color-secondary-foreground: #fafafa;
+
+  --color-muted: #27272a;
+  --color-muted-foreground: #a1a1aa;
+
+  --color-accent: #27272a;
+  --color-accent-foreground: #fafafa;
+
+  --color-destructive: #7f1d1d;
+  --color-destructive-foreground: #fafafa;
+
+  --color-border: #27272a;
+  --color-input: #27272a;
+  --color-ring: #d4d4d8;
+
+  --color-sidebar: #0e0e11;
+  --color-sidebar-foreground: #e4e4e7;
+  --color-sidebar-border: #27272a;
+  --color-sidebar-accent: #1e1e24;
+  --color-sidebar-accent-foreground: #fafafa;
+  --color-sidebar-primary: #3b82f6;
+  --color-sidebar-primary-foreground: #ffffff;
 }
 
-/* ===== Base Styles ===== */
+/* Base Styles */
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
-  border-color: hsl(var(--border));
 }
 
-html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
+html, body {
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
   overflow: hidden;
   height: 100vh;
   width: 100vw;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
@@ -104,12 +110,7 @@ body {
   overflow: hidden;
 }
 
-/* ===== Typography ===== */
-.font-mono {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-}
-
-/* ===== Scrollbar ===== */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -120,79 +121,33 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.2);
-  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.4);
+  background: rgba(0, 0, 0, 0.25);
 }
 
-/* ===== Transitions ===== */
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Transitions */
 .transition-sidebar {
-  transition: width 200ms cubic-bezier(0.4, 0, 0.2, 1),
-              padding 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ===== Animations ===== */
+/* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-8px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(8px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes pulse-subtle {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
-@keyframes typing-cursor {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
 .animate-fade-in {
-  animation: fadeIn 200ms ease-out forwards;
+  animation: fadeIn 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-
-.animate-slide-up {
-  animation: slideUp 250ms ease-out forwards;
-}
-
-.animate-slide-in-left {
-  animation: slideInLeft 200ms ease-out forwards;
-}
-
-.animate-slide-in-right {
-  animation: slideInRight 200ms ease-out forwards;
-}
-
-.animate-pulse-subtle {
-  animation: pulse-subtle 2s ease-in-out infinite;
-}
-
-.animate-typing-cursor {
-  animation: typing-cursor 1s step-end infinite;
-}
-
-/* ===== Staggered animations ===== */
-.stagger-1 { animation-delay: 50ms; }
-.stagger-2 { animation-delay: 100ms; }
-.stagger-3 { animation-delay: 150ms; }
-.stagger-4 { animation-delay: 200ms; }
-.stagger-5 { animation-delay: 250ms; }
-.stagger-6 { animation-delay: 300ms; }

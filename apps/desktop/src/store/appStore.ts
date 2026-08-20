@@ -8,6 +8,11 @@ interface AppState {
   toggleSidebar: () => void;
   setActiveSection: (section: NavSection) => void;
 
+  // Debug Panel (Reference image layout)
+  debugPanelOpen: boolean;
+  toggleDebugPanel: () => void;
+  setDebugPanelOpen: (open: boolean) => void;
+
   // Theme
   theme: "light" | "dark" | "system";
   setTheme: (theme: "light" | "dark" | "system") => void;
@@ -31,6 +36,10 @@ export const useAppStore = create<AppState>((set) => ({
   toggleSidebar: () => set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
   setActiveSection: (section) => set({ activeSection: section }),
 
+  debugPanelOpen: false,
+  toggleDebugPanel: () => set((state) => ({ debugPanelOpen: !state.debugPanelOpen })),
+  setDebugPanelOpen: (open) => set({ debugPanelOpen: open }),
+
   theme: "light",
   setTheme: (theme) => {
     set({ theme });
@@ -40,7 +49,6 @@ export const useAppStore = create<AppState>((set) => ({
     } else if (theme === "light") {
       root.classList.remove("dark");
     } else {
-      // System preference
       const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       if (prefersDark) {
         root.classList.add("dark");

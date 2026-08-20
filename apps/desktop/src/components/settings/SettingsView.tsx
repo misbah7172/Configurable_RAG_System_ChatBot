@@ -18,86 +18,59 @@ import {
   Monitor,
   Eye,
   EyeOff,
+  Save,
 } from "lucide-react";
 
 export function SettingsView() {
   const [activeTab, setActiveTab] = useState("general");
 
   const tabs = [
-    { id: "general", label: "General", icon: <Settings size={16} /> },
-    { id: "connection", label: "API Connection", icon: <Globe size={16} /> },
-    { id: "llm", label: "LLM Providers", icon: <Cpu size={16} /> },
-    { id: "embedding", label: "Embedding", icon: <Layers size={16} /> },
-    { id: "reranking", label: "Reranking", icon: <Wrench size={16} /> },
-    { id: "storage", label: "Storage", icon: <HardDrive size={16} /> },
-    { id: "cache", label: "Cache", icon: <Database size={16} /> },
-    { id: "advanced", label: "Advanced", icon: <Key size={16} /> },
+    { id: "general", label: "General & Appearance", icon: <Settings size={15} /> },
+    { id: "connection", label: "API Connection", icon: <Globe size={15} /> },
+    { id: "llm", label: "LLM Provider Keys", icon: <Cpu size={15} /> },
+    { id: "embedding", label: "Embedding Engine", icon: <Layers size={15} /> },
+    { id: "storage", label: "Object Storage (MinIO/S3)", icon: <HardDrive size={15} /> },
+    { id: "cache", label: "Redis State & Caches", icon: <Database size={15} /> },
   ];
 
   return (
-    <div className="flex h-full">
-      {/* Settings Sidebar */}
-      <div className="w-56 border-r border-[hsl(var(--border))] py-4 px-2">
-        <div className="px-3 pb-3">
-          <h1 className="text-sm font-semibold text-[hsl(var(--foreground))]">Settings</h1>
-          <p className="text-xs text-[hsl(var(--muted-foreground))]">Manage your platform configuration</p>
+    <div className="flex h-full overflow-hidden bg-background">
+      {/* Settings Navigation Sidebar */}
+      <div className="w-64 border-r border-border bg-sidebar/40 p-4 space-y-1 shrink-0 overflow-y-auto">
+        <div className="px-2 pb-2">
+          <h2 className="text-xs font-bold text-foreground">Preferences</h2>
+          <p className="text-[10px] text-muted-foreground">Manage your desktop and cloud settings</p>
         </div>
-        <div className="space-y-0.5">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={cn(
-                "flex items-center gap-2.5 w-full px-3 py-2 text-sm rounded-md transition-colors",
-                activeTab === tab.id
-                  ? "bg-[hsl(var(--accent))] text-[hsl(var(--foreground))] font-medium"
-                  : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--accent))] hover:text-[hsl(var(--foreground))]"
-              )}
-            >
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={cn(
+              "flex items-center gap-2.5 w-full px-3 py-2 text-xs rounded-xl font-medium transition-colors text-left",
+              activeTab === tab.id
+                ? "bg-card border border-border text-foreground font-semibold shadow-2xs"
+                : "text-muted-foreground hover:bg-card/60 hover:text-foreground"
+            )}
+          >
+            <span className={cn(activeTab === tab.id ? "text-primary" : "text-muted-foreground")}>
               {tab.icon}
-              {tab.label}
-            </button>
-          ))}
-        </div>
+            </span>
+            <span className="truncate">{tab.label}</span>
+          </button>
+        ))}
       </div>
 
       {/* Settings Content */}
-      <div className="flex-1 overflow-y-auto p-6">
-        <div className="max-w-2xl">
+      <div className="flex-1 overflow-y-auto p-6 lg:p-8">
+        <div className="max-w-2xl space-y-6">
           {activeTab === "general" && <GeneralSettings />}
           {activeTab === "connection" && <ConnectionSettings />}
           {activeTab === "llm" && <LLMProviderSettings />}
           {activeTab === "embedding" && <EmbeddingSettings />}
-          {activeTab === "reranking" && <RerankingSettings />}
           {activeTab === "storage" && <StorageSettings />}
           {activeTab === "cache" && <CacheSettings />}
-          {activeTab === "advanced" && <AdvancedSettings />}
         </div>
       </div>
-    </div>
-  );
-}
-
-function SettingsSection({ title, description, children }: { title: string; description?: string; children: React.ReactNode }) {
-  return (
-    <div className="space-y-4 animate-fade-in">
-      <div>
-        <h2 className="text-base font-semibold text-[hsl(var(--foreground))]">{title}</h2>
-        {description && <p className="text-sm text-[hsl(var(--muted-foreground))] mt-1">{description}</p>}
-      </div>
-      <div className="space-y-4">{children}</div>
-    </div>
-  );
-}
-
-function SettingsField({ label, description, children }: { label: string; description?: string; children: React.ReactNode }) {
-  return (
-    <div className="flex items-start justify-between py-3 border-b border-[hsl(var(--border))] last:border-0">
-      <div className="flex-1 mr-4">
-        <label className="text-sm font-medium text-[hsl(var(--foreground))]">{label}</label>
-        {description && <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">{description}</p>}
-      </div>
-      <div className="flex-shrink-0">{children}</div>
     </div>
   );
 }
@@ -106,147 +79,127 @@ function GeneralSettings() {
   const { theme, setTheme } = useAppStore();
 
   return (
-    <SettingsSection title="General" description="Application appearance and behavior">
-      <SettingsField label="Theme" description="Choose your preferred color scheme">
-        <div className="flex items-center gap-1 p-1 rounded-lg bg-[hsl(var(--muted))]">
-          {([
-            { value: "light" as const, icon: <Sun size={14} />, label: "Light" },
-            { value: "dark" as const, icon: <Moon size={14} />, label: "Dark" },
-            { value: "system" as const, icon: <Monitor size={14} />, label: "System" },
-          ]).map(({ value, icon, label }) => (
-            <button
-              key={value}
-              onClick={() => setTheme(value)}
-              className={cn(
-                "flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md transition-colors",
-                theme === value
-                  ? "bg-[hsl(var(--background))] text-[hsl(var(--foreground))] shadow-sm font-medium"
-                  : "text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
-              )}
-            >
-              {icon}
-              {label}
-            </button>
-          ))}
+    <div className="space-y-5 animate-fade-in text-xs">
+      <div>
+        <h3 className="text-sm font-bold text-foreground">Appearance & Desktop Shell</h3>
+        <p className="text-muted-foreground text-[11px]">Customize desktop theme and interface</p>
+      </div>
+
+      <div className="p-5 rounded-2xl border border-border bg-card shadow-2xs space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <span className="font-semibold text-foreground">Color Theme</span>
+            <p className="text-[11px] text-muted-foreground">Select interface color palette</p>
+          </div>
+          <div className="flex items-center gap-1 p-1 rounded-lg bg-muted border border-border">
+            {[
+              { id: "light" as const, label: "Light", icon: <Sun size={13} /> },
+              { id: "dark" as const, label: "Dark", icon: <Moon size={13} /> },
+              { id: "system" as const, label: "System", icon: <Monitor size={13} /> },
+            ].map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setTheme(t.id)}
+                className={cn(
+                  "flex items-center gap-1 px-2.5 py-1 text-xs rounded-md font-medium transition-colors",
+                  theme === t.id
+                    ? "bg-card text-foreground shadow-2xs font-semibold"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {t.icon}
+                <span>{t.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
-      </SettingsField>
-      <SettingsField label="Language" description="Display language">
-        <select className="px-3 py-1.5 text-sm rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] outline-none">
-          <option>English</option>
-        </select>
-      </SettingsField>
-    </SettingsSection>
+      </div>
+    </div>
   );
 }
 
 function ConnectionSettings() {
-  const [status, setStatus] = useState<"connected" | "disconnected" | "checking">("connected");
+  const [status, setStatus] = useState<"connected" | "checking">("connected");
 
   return (
-    <SettingsSection title="API Connection" description="Configure the backend API connection">
-      <div className="space-y-4">
+    <div className="space-y-5 animate-fade-in text-xs">
+      <div>
+        <h3 className="text-sm font-bold text-foreground">FastAPI Backend Connection</h3>
+        <p className="text-muted-foreground text-[11px]">Configure URL endpoint and verify connectivity</p>
+      </div>
+
+      <div className="p-5 rounded-2xl border border-border bg-card shadow-2xs space-y-4">
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-[hsl(var(--foreground))]">Backend URL</label>
+          <label className="font-semibold text-foreground">API Server URL</label>
           <div className="flex gap-2">
             <input
               type="text"
               defaultValue="http://localhost:8000"
-              className="flex-1 px-3 py-2 text-sm rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] outline-none focus:ring-1 focus:ring-[hsl(var(--ring))] font-mono"
+              className="flex-1 px-3 py-2 text-xs rounded-lg border border-border bg-background font-mono text-foreground outline-none"
             />
             <button
               onClick={() => {
                 setStatus("checking");
-                setTimeout(() => setStatus("connected"), 1500);
+                setTimeout(() => setStatus("connected"), 800);
               }}
-              className="px-3 py-2 text-sm rounded-md border border-[hsl(var(--border))] hover:bg-[hsl(var(--accent))] transition-colors"
+              className="px-3 py-2 text-xs font-medium rounded-lg border border-border bg-card hover:bg-muted transition-colors"
             >
-              Test
+              {status === "checking" ? <Loader2 size={13} className="animate-spin" /> : "Test Ping"}
             </button>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 p-3 rounded-lg bg-[hsl(var(--muted))]">
-          {status === "connected" && (
-            <>
-              <CheckCircle2 size={16} className="text-emerald-600" />
-              <span className="text-sm text-emerald-600 font-medium">Connected</span>
-            </>
-          )}
-          {status === "disconnected" && (
-            <>
-              <XCircle size={16} className="text-red-500" />
-              <span className="text-sm text-red-500 font-medium">Disconnected</span>
-            </>
-          )}
-          {status === "checking" && (
-            <>
-              <Loader2 size={16} className="text-blue-500 animate-spin" />
-              <span className="text-sm text-blue-500 font-medium">Checking connection...</span>
-            </>
-          )}
+        <div className="flex items-center gap-2 p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200/50">
+          <CheckCircle2 size={15} />
+          <span className="font-medium text-[11px]">FastAPI v1 Gateway Online (200 OK)</span>
         </div>
       </div>
-    </SettingsSection>
+    </div>
   );
 }
 
 function LLMProviderSettings() {
   return (
-    <SettingsSection title="LLM Providers" description="Configure API keys for language model providers">
-      <div className="space-y-4">
-        <ProviderKeyField name="OpenAI" keyValue="sk-proj-****...****7f3A" isConfigured />
-        <ProviderKeyField name="Anthropic" keyValue="" isConfigured={false} />
-        <ProviderKeyField name="Google Gemini" keyValue="AIza****...****Nw" isConfigured />
-        <div className="space-y-1.5 p-4 rounded-lg border border-[hsl(var(--border))]">
-          <label className="text-sm font-medium text-[hsl(var(--foreground))]">Ollama</label>
-          <p className="text-xs text-[hsl(var(--muted-foreground))]">Local LLM provider</p>
-          <input
-            type="text"
-            defaultValue="http://localhost:11434"
-            className="w-full px-3 py-2 text-sm rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] outline-none font-mono mt-2"
-          />
-        </div>
+    <div className="space-y-5 animate-fade-in text-xs">
+      <div>
+        <h3 className="text-sm font-bold text-foreground">LLM Provider Credentials</h3>
+        <p className="text-muted-foreground text-[11px]">Secure API keys stored locally in desktop vault</p>
       </div>
-    </SettingsSection>
+
+      <div className="space-y-3">
+        <KeyInputCard name="OpenAI API Key" defaultValue="sk-proj-****...****7f3A" isConfigured />
+        <KeyInputCard name="Anthropic API Key" defaultValue="" isConfigured={false} />
+        <KeyInputCard name="Google Gemini API Key" defaultValue="AIza****...****Nw" isConfigured />
+      </div>
+    </div>
   );
 }
 
-function ProviderKeyField({ name, keyValue, isConfigured }: { name: string; keyValue: string; isConfigured: boolean }) {
-  const [showKey, setShowKey] = useState(false);
+function KeyInputCard({ name, defaultValue, isConfigured }: { name: string; defaultValue: string; isConfigured: boolean }) {
+  const [show, setShow] = useState(false);
 
   return (
-    <div className="p-4 rounded-lg border border-[hsl(var(--border))]">
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-[hsl(var(--foreground))]">{name}</span>
-          {isConfigured ? (
-            <span className="text-xs px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400 font-medium">
-              Configured
-            </span>
-          ) : (
-            <span className="text-xs px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 font-medium">
-              Not configured
-            </span>
-          )}
-        </div>
+    <div className="p-4 rounded-xl border border-border bg-card shadow-2xs space-y-2">
+      <div className="flex items-center justify-between">
+        <span className="font-semibold text-foreground text-xs">{name}</span>
+        {isConfigured ? (
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 font-medium">Configured</span>
+        ) : (
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground font-medium">Not set</span>
+        )}
       </div>
-      <div className="flex gap-2">
-        <div className="relative flex-1">
-          <input
-            type={showKey ? "text" : "password"}
-            defaultValue={keyValue}
-            placeholder={`Enter ${name} API key`}
-            className="w-full px-3 py-2 pr-10 text-sm rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] outline-none font-mono"
-          />
-          <button
-            onClick={() => setShowKey(!showKey)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
-          >
-            {showKey ? <EyeOff size={14} /> : <Eye size={14} />}
-          </button>
-        </div>
-        <button className="px-3 py-2 text-sm rounded-md bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] hover:opacity-90 transition-opacity">
-          Save
+      <div className="relative">
+        <input
+          type={show ? "text" : "password"}
+          defaultValue={defaultValue}
+          placeholder={`Enter your ${name}`}
+          className="w-full pl-3 pr-8 py-2 rounded-lg border border-border bg-background font-mono text-xs text-foreground outline-none"
+        />
+        <button
+          onClick={() => setShow(!show)}
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+        >
+          {show ? <EyeOff size={13} /> : <Eye size={13} />}
         </button>
       </div>
     </div>
@@ -255,145 +208,61 @@ function ProviderKeyField({ name, keyValue, isConfigured }: { name: string; keyV
 
 function EmbeddingSettings() {
   return (
-    <SettingsSection title="Embedding" description="Configure embedding model providers">
-      <div className="p-4 rounded-lg border border-[hsl(var(--border))]">
-        <div className="flex items-center justify-between mb-3">
-          <div>
-            <h3 className="text-sm font-medium text-[hsl(var(--foreground))]">Local BGE-M3</h3>
-            <p className="text-xs text-[hsl(var(--muted-foreground))]">Default local embedding model</p>
-          </div>
-          <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400 font-medium">
-            <CheckCircle2 size={12} /> Running
-          </span>
+    <div className="space-y-5 animate-fade-in text-xs">
+      <div>
+        <h3 className="text-sm font-bold text-foreground">Embedding Service</h3>
+        <p className="text-muted-foreground text-[11px]">Local BGE-M3 model status and parameters</p>
+      </div>
+      <div className="p-5 rounded-2xl border border-border bg-card shadow-2xs space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="font-semibold text-foreground">Local BGE-M3 Inference</span>
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 font-medium">Active (CPU/GPU)</span>
         </div>
-        <div className="grid grid-cols-2 gap-3 text-sm">
-          <div className="p-2 rounded bg-[hsl(var(--muted))]">
-            <span className="text-xs text-[hsl(var(--muted-foreground))]">Model</span>
-            <p className="font-mono text-[hsl(var(--foreground))]">BGE-M3</p>
+        <div className="grid grid-cols-2 gap-2 text-[11px]">
+          <div className="p-2.5 rounded-lg bg-muted/60">
+            <span className="text-muted-foreground">Vector Dimensions</span>
+            <div className="font-mono font-bold mt-0.5">1024</div>
           </div>
-          <div className="p-2 rounded bg-[hsl(var(--muted))]">
-            <span className="text-xs text-[hsl(var(--muted-foreground))]">Dimensions</span>
-            <p className="font-mono text-[hsl(var(--foreground))]">1024</p>
+          <div className="p-2.5 rounded-lg bg-muted/60">
+            <span className="text-muted-foreground">Max Sequence Length</span>
+            <div className="font-mono font-bold mt-0.5">8192 tokens</div>
           </div>
         </div>
       </div>
-
-      <ProviderKeyField name="Voyage AI" keyValue="" isConfigured={false} />
-    </SettingsSection>
-  );
-}
-
-function RerankingSettings() {
-  return (
-    <SettingsSection title="Reranking" description="Configure reranking model providers">
-      <ProviderKeyField name="Voyage Reranker" keyValue="" isConfigured={false} />
-      <ProviderKeyField name="Cohere Reranker" keyValue="" isConfigured={false} />
-    </SettingsSection>
+    </div>
   );
 }
 
 function StorageSettings() {
   return (
-    <SettingsSection title="Object Storage" description="Configure storage for document files">
-      <div className="space-y-3">
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium text-[hsl(var(--foreground))]">Provider</label>
-          <select className="w-full px-3 py-2 text-sm rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] outline-none">
-            <option>MinIO (Local)</option>
-            <option>Amazon S3</option>
-            <option>Cloudflare R2</option>
-          </select>
-        </div>
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium text-[hsl(var(--foreground))]">Endpoint</label>
-          <input
-            type="text"
-            defaultValue="http://localhost:9000"
-            className="w-full px-3 py-2 text-sm rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] outline-none font-mono"
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium text-[hsl(var(--foreground))]">Access Key</label>
-            <input
-              type="password"
-              defaultValue="minioadmin"
-              className="w-full px-3 py-2 text-sm rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] outline-none font-mono"
-            />
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium text-[hsl(var(--foreground))]">Secret Key</label>
-            <input
-              type="password"
-              defaultValue="minioadmin"
-              className="w-full px-3 py-2 text-sm rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] outline-none font-mono"
-            />
-          </div>
-        </div>
-        <button className="px-3 py-2 text-sm rounded-md bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] hover:opacity-90 transition-opacity">
-          Save & Test Connection
-        </button>
+    <div className="space-y-5 animate-fade-in text-xs">
+      <div>
+        <h3 className="text-sm font-bold text-foreground">Object Storage</h3>
+        <p className="text-muted-foreground text-[11px]">S3-compatible raw document storage configuration</p>
       </div>
-    </SettingsSection>
+      <div className="p-5 rounded-2xl border border-border bg-card shadow-2xs space-y-3">
+        <div>
+          <label className="block font-semibold mb-1">MinIO / S3 Endpoint</label>
+          <input type="text" defaultValue="http://localhost:9000" className="w-full px-3 py-2 rounded-lg border border-border bg-background font-mono outline-none" />
+        </div>
+      </div>
+    </div>
   );
 }
 
 function CacheSettings() {
   return (
-    <SettingsSection title="Cache" description="Configure Redis connection and default cache settings">
-      <div className="space-y-3">
-        <div className="space-y-1.5">
-          <label className="text-sm font-medium text-[hsl(var(--foreground))]">Redis URL</label>
-          <input
-            type="text"
-            defaultValue="redis://localhost:6379"
-            className="w-full px-3 py-2 text-sm rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] outline-none font-mono"
-          />
-        </div>
-        <div className="flex items-center gap-2 p-3 rounded-lg bg-[hsl(var(--muted))]">
-          <CheckCircle2 size={16} className="text-emerald-600" />
-          <span className="text-sm text-emerald-600 font-medium">Redis Connected</span>
+    <div className="space-y-5 animate-fade-in text-xs">
+      <div>
+        <h3 className="text-sm font-bold text-foreground">Redis Cache & State</h3>
+        <p className="text-muted-foreground text-[11px]">Fast in-memory cache and distributed queues</p>
+      </div>
+      <div className="p-5 rounded-2xl border border-border bg-card shadow-2xs space-y-3">
+        <div>
+          <label className="block font-semibold mb-1">Redis URI</label>
+          <input type="text" defaultValue="redis://localhost:6379" className="w-full px-3 py-2 rounded-lg border border-border bg-background font-mono outline-none" />
         </div>
       </div>
-    </SettingsSection>
-  );
-}
-
-function AdvancedSettings() {
-  return (
-    <SettingsSection title="Advanced" description="Advanced configuration options">
-      <SettingsField label="Debug Mode" description="Show detailed request/response logs">
-        <ToggleButton defaultEnabled={false} />
-      </SettingsField>
-      <SettingsField label="Telemetry" description="Send anonymous usage data to improve the platform">
-        <ToggleButton defaultEnabled={true} />
-      </SettingsField>
-      <SettingsField label="Log Level" description="Minimum log level for output">
-        <select className="px-3 py-1.5 text-sm rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] outline-none">
-          <option>INFO</option>
-          <option>DEBUG</option>
-          <option>WARNING</option>
-          <option>ERROR</option>
-        </select>
-      </SettingsField>
-    </SettingsSection>
-  );
-}
-
-function ToggleButton({ defaultEnabled }: { defaultEnabled: boolean }) {
-  const [enabled, setEnabled] = useState(defaultEnabled);
-  return (
-    <button
-      onClick={() => setEnabled(!enabled)}
-      className={cn(
-        "relative w-9 h-5 rounded-full transition-colors",
-        enabled ? "bg-[hsl(var(--primary))]" : "bg-[hsl(var(--muted))]"
-      )}
-    >
-      <div className={cn(
-        "absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform",
-        enabled ? "left-[18px]" : "left-0.5"
-      )} />
-    </button>
+    </div>
   );
 }

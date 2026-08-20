@@ -12,6 +12,11 @@ import {
   HelpCircle,
   PanelLeftClose,
   PanelLeft,
+  Plus,
+  Mail,
+  ChevronDown,
+  MoreVertical,
+  Layers,
   Sparkles,
 } from "lucide-react";
 
@@ -19,18 +24,17 @@ interface NavItem {
   id: NavSection;
   label: string;
   icon: React.ReactNode;
-  group?: string;
 }
 
-const mainNavItems: NavItem[] = [
-  { id: "chat", label: "Chat", icon: <MessageSquare size={18} /> },
-  { id: "chatbots", label: "Chatbots", icon: <Bot size={18} /> },
-  { id: "analytics", label: "Analytics", icon: <BarChart3 size={18} /> },
+const platformNavItems: NavItem[] = [
+  { id: "chat", label: "Dashboard / Chat", icon: <MessageSquare size={17} /> },
+  { id: "chatbots", label: "Chatbot Builder", icon: <Bot size={17} /> },
+  { id: "analytics", label: "Analytics & Stats", icon: <BarChart3 size={17} /> },
 ];
 
-const dataNavItems: NavItem[] = [
-  { id: "knowledge", label: "Knowledge Bases", icon: <Database size={18} /> },
-  { id: "evaluation", label: "Evaluation", icon: <FlaskConical size={18} /> },
+const documentsNavItems: NavItem[] = [
+  { id: "knowledge", label: "Data Library / KBs", icon: <Database size={17} /> },
+  { id: "evaluation", label: "Reports & Evaluation", icon: <FlaskConical size={17} /> },
 ];
 
 export function Sidebar() {
@@ -40,73 +44,79 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "flex flex-col h-full border-r border-[hsl(var(--sidebar-border))] bg-[hsl(var(--sidebar))] transition-sidebar select-none",
-        sidebarCollapsed ? "w-[var(--sidebar-width-collapsed)]" : "w-[var(--sidebar-width)]"
+        "flex flex-col h-full border-r border-sidebar-border bg-sidebar transition-sidebar select-none shrink-0 z-10",
+        sidebarCollapsed ? "w-16" : "w-64"
       )}
     >
-      {/* Header */}
+      {/* Header / Brand */}
       <div className={cn(
-        "flex items-center h-14 px-3 border-b border-[hsl(var(--sidebar-border))]",
-        sidebarCollapsed ? "justify-center" : "gap-2"
+        "flex items-center h-14 px-3.5 border-b border-sidebar-border/80",
+        sidebarCollapsed ? "justify-center" : "justify-between"
       )}>
-        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-[hsl(var(--foreground))] text-[hsl(var(--background))]">
-          <Sparkles size={16} />
-        </div>
-        {!sidebarCollapsed && (
-          <div className="flex flex-col min-w-0 animate-fade-in">
-            <span className="text-sm font-semibold text-[hsl(var(--foreground))] truncate">
-              RAG Platform
-            </span>
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-primary-foreground font-semibold shrink-0 shadow-xs">
+            <Sparkles size={16} />
           </div>
-        )}
+          {!sidebarCollapsed && (
+            <div className="flex items-center gap-1.5 min-w-0 animate-fade-in">
+              <span className="text-sm font-semibold text-foreground truncate tracking-tight">
+                RAG Studio
+              </span>
+              <ChevronDown size={13} className="text-muted-foreground shrink-0" />
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Search (only when expanded) */}
+      {/* Quick Action Button (Matching reference UI) */}
       {!sidebarCollapsed && (
-        <div className="px-3 pt-3 animate-fade-in">
-          <button className="flex items-center gap-2 w-full px-3 py-1.5 text-sm text-[hsl(var(--muted-foreground))] rounded-md border border-[hsl(var(--border))] hover:bg-[hsl(var(--sidebar-accent))] transition-colors">
-            <Search size={14} />
-            <span>Search...</span>
-            <kbd className="ml-auto text-xs text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))] px-1.5 py-0.5 rounded font-mono">
-              ⌘K
-            </kbd>
+        <div className="p-3 pb-1.5">
+          <button
+            onClick={() => setActiveSection("chatbots")}
+            className="flex items-center justify-center gap-2 w-full px-3.5 py-2 text-xs font-medium rounded-lg bg-primary text-primary-foreground hover:opacity-90 shadow-xs transition-all"
+          >
+            <Plus size={14} className="stroke-[2.5]" />
+            <span>Quick Create</span>
+            <Mail size={13} className="ml-auto opacity-70" />
           </button>
         </div>
       )}
 
-      {/* Main Navigation */}
-      <nav className="flex-1 overflow-y-auto py-3 px-2">
-        {/* Main */}
-        {!sidebarCollapsed && (
-          <div className="px-2 pb-1">
-            <span className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
-              Main
-            </span>
-          </div>
-        )}
-        <div className="space-y-0.5">
-          {mainNavItems.map((item) => (
-            <NavButton
-              key={item.id}
-              item={item}
-              isActive={activeSection === item.id}
-              isCollapsed={sidebarCollapsed}
-              onClick={() => setActiveSection(item.id)}
-            />
-          ))}
-        </div>
-
-        {/* Data section */}
-        <div className="mt-5">
+      {/* Navigation Links */}
+      <nav className="flex-1 overflow-y-auto px-2.5 py-2 space-y-5">
+        {/* Section 1: Platform */}
+        <div>
           {!sidebarCollapsed && (
-            <div className="px-2 pb-1">
-              <span className="text-xs font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider">
-                Data
+            <div className="px-2.5 pb-1.5">
+              <span className="text-[10px] font-semibold text-muted-foreground/80 uppercase tracking-wider">
+                Platform
               </span>
             </div>
           )}
           <div className="space-y-0.5">
-            {dataNavItems.map((item) => (
+            {platformNavItems.map((item) => (
+              <NavButton
+                key={item.id}
+                item={item}
+                isActive={activeSection === item.id}
+                isCollapsed={sidebarCollapsed}
+                onClick={() => setActiveSection(item.id)}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Section 2: Documents */}
+        <div>
+          {!sidebarCollapsed && (
+            <div className="px-2.5 pb-1.5">
+              <span className="text-[10px] font-semibold text-muted-foreground/80 uppercase tracking-wider">
+                Documents & Data
+              </span>
+            </div>
+          )}
+          <div className="space-y-0.5">
+            {documentsNavItems.map((item) => (
               <NavButton
                 key={item.id}
                 item={item}
@@ -119,54 +129,57 @@ export function Sidebar() {
         </div>
       </nav>
 
-      {/* Bottom section */}
-      <div className="border-t border-[hsl(var(--sidebar-border))] py-2 px-2 space-y-0.5">
+      {/* Footer Navigation */}
+      <div className="p-2.5 border-t border-sidebar-border space-y-0.5">
         <NavButton
-          item={{ id: "settings", label: "Settings", icon: <Settings size={18} /> }}
+          item={{ id: "settings", label: "Settings", icon: <Settings size={17} /> }}
           isActive={activeSection === "settings"}
           isCollapsed={sidebarCollapsed}
           onClick={() => setActiveSection("settings")}
         />
+
         {!sidebarCollapsed && (
           <button
-            className="flex items-center gap-3 w-full px-3 py-2 text-sm rounded-md text-[hsl(var(--sidebar-foreground))] hover:bg-[hsl(var(--sidebar-accent))] transition-colors"
+            onClick={() => setActiveSection("settings")}
+            className="flex items-center gap-2.5 w-full px-2.5 py-2 text-xs font-medium rounded-lg text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
           >
-            <HelpCircle size={18} />
+            <HelpCircle size={17} className="text-muted-foreground" />
             <span>Get Help</span>
           </button>
         )}
 
-        {/* Collapse toggle */}
+        {/* Sidebar Collapse Toggle */}
         <button
           onClick={toggleSidebar}
-          className="flex items-center gap-3 w-full px-3 py-2 text-sm rounded-md text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--sidebar-accent))] hover:text-[hsl(var(--sidebar-foreground))] transition-colors"
+          className="flex items-center gap-2.5 w-full px-2.5 py-2 text-xs font-medium rounded-lg text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
+          title="Toggle Sidebar"
         >
-          {sidebarCollapsed ? <PanelLeft size={18} /> : <PanelLeftClose size={18} />}
-          {!sidebarCollapsed && <span>Collapse</span>}
+          {sidebarCollapsed ? <PanelLeft size={17} /> : <PanelLeftClose size={17} />}
+          {!sidebarCollapsed && <span>Collapse Sidebar</span>}
         </button>
       </div>
 
-      {/* User */}
-      <div className={cn(
-        "border-t border-[hsl(var(--sidebar-border))] p-3",
-        sidebarCollapsed ? "flex justify-center" : ""
-      )}>
+      {/* User Card (Matching reference UI) */}
+      <div className="p-2 border-t border-sidebar-border bg-sidebar/50">
         <div className={cn(
-          "flex items-center gap-2",
-          sidebarCollapsed && "justify-center"
+          "flex items-center gap-2.5 p-1.5 rounded-lg hover:bg-sidebar-accent cursor-pointer transition-colors",
+          sidebarCollapsed && "justify-center p-1"
         )}>
-          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] text-sm font-medium">
+          <div className="flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-bold shrink-0 shadow-xs">
             M
           </div>
           {!sidebarCollapsed && (
-            <div className="flex flex-col min-w-0 animate-fade-in">
-              <span className="text-sm font-medium text-[hsl(var(--foreground))] truncate">
-                Misbah
-              </span>
-              <span className="text-xs text-[hsl(var(--muted-foreground))] truncate">
-                admin@platform.io
-              </span>
-            </div>
+            <>
+              <div className="flex flex-col min-w-0 flex-1 leading-tight">
+                <span className="text-xs font-semibold text-foreground truncate">
+                  Misbah
+                </span>
+                <span className="text-[10px] text-muted-foreground truncate">
+                  admin@platform.io
+                </span>
+              </div>
+              <MoreVertical size={13} className="text-muted-foreground shrink-0" />
+            </>
           )}
         </div>
       </div>
@@ -190,17 +203,17 @@ function NavButton({
       onClick={onClick}
       title={isCollapsed ? item.label : undefined}
       className={cn(
-        "flex items-center gap-3 w-full px-3 py-2 text-sm rounded-md transition-colors",
-        isCollapsed && "justify-center px-0",
+        "flex items-center gap-2.5 w-full px-2.5 py-2 text-xs font-medium rounded-lg transition-colors text-left",
+        isCollapsed && "justify-center px-0 py-2.5",
         isActive
-          ? "bg-[hsl(var(--sidebar-accent))] text-[hsl(var(--sidebar-accent-foreground))] font-medium"
-          : "text-[hsl(var(--sidebar-foreground))] hover:bg-[hsl(var(--sidebar-accent))] hover:text-[hsl(var(--sidebar-accent-foreground))]"
+          ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold shadow-2xs"
+          : "text-sidebar-foreground hover:bg-sidebar-accent/80 hover:text-sidebar-accent-foreground"
       )}
     >
-      <span className={cn(isActive && "text-[hsl(var(--sidebar-primary))]")}>
+      <span className={cn("shrink-0", isActive ? "text-primary" : "text-muted-foreground")}>
         {item.icon}
       </span>
-      {!isCollapsed && <span>{item.label}</span>}
+      {!isCollapsed && <span className="truncate">{item.label}</span>}
     </button>
   );
 }
